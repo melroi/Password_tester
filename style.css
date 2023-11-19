@@ -5,6 +5,7 @@ body {
     justify-content: center;
     height: 100vh;
     margin: 0;
+    background-color: lightblue;
     
 }
 
@@ -15,7 +16,5 @@ body {
 input {
     padding: 8px;
     margin: 8px 0;
-    a {
-  color: #112d4e; 
-}
+   
 }
