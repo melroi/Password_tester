@@ -19,32 +19,47 @@ function calculateTimeToCrack(password) {
 }
 
 function calculateTimeToCrackValue(password) {
-    var guessesPerSecond = 1e3;
-    var lengthFactor = Math.pow(password.length, 2);
-    var featuresFactor = 1;
+  var guessesPerSecond = 1e3;
+  var lengthFactor = Math.pow(password.length, 2);
+  var featuresFactor = 1;
 
-    if (/[A-Z]/.test(password)) {
-        featuresFactor *= 26;
-    }
+  if (/[A-Z]/.test(password)) {
+    featuresFactor *= 26;
+  }
 
-    if (/[0-9]/.test(password)) {
-        featuresFactor *= 10;
-    }
+  if (/[0-9]/.test(password)) {
+    featuresFactor *= 10;
+  }
 
-    if (/[!@#\$%\^&\*]/.test(password)) {
-        featuresFactor *= 10;
-    }
+  if (/[!@#\$%\^&\*]/.test(password)) {
+    featuresFactor *= 10;
+  }
 
-    var totalCombinations = lengthFactor * featuresFactor;
-    var seconds = totalCombinations / guessesPerSecond;
-    var minutes = seconds / 60;
-    var hours = minutes / 60;
-    var days = hours / 24;
+  var totalCombinations = lengthFactor * featuresFactor;
+  var seconds = totalCombinations / guessesPerSecond;
 
-    return days.toFixed(2);  // Ne pas ajouter " days" ici
+  // Convert seconds to days, hours, minutes, and seconds
+  var days = Math.floor(seconds / (60 * 60 * 24));
+  var hours = Math.floor((seconds % (60 * 60 * 24)) / (60 * 60));
+  var minutes = Math.floor((seconds % (60 * 60)) / 60);
+  seconds = seconds % 60;
+
+  // Construct a readable time format
+  var timeFormat = "";
+  if (days > 0) {
+    timeFormat += days + " days, ";
+  }
+  if (hours > 0) {
+    timeFormat += hours + " hours, ";
+  }
+  if (minutes > 0) {
+    timeFormat += minutes + " minutes, ";
+  }
+  timeFormat += seconds.toFixed(2) + " seconds";
+
+  return timeFormat;
 }
 
-// Reste du code inchangé...
 
 function checkPasswordStrength() {
     var password = document.getElementById("password").value;
