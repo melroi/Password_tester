@@ -15,7 +15,7 @@ function togglePassword() {
 
 function calculateTimeToCrack(password) {
     // Supposons une attaque avec un ordinateur capable de tester 1 million de mots de passe par seconde
-    var guessesPerSecond = 1e6;
+    var guessesPerSecond = 100;
 
     // Calculer le nombre total de combinaisons possibles (force brute)
     var totalCombinations = Math.pow(94, password.length);
