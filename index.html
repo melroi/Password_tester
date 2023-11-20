@@ -10,10 +10,9 @@
     <div class="container">
         <h2>Password Strength Checker</h2>
         <label for="password">Enter your password:</label>
-        <input type="password" id="password" oninput="checkPasswordStrength() "oninput="calculateLengthScore()" oninput="calculateTimeToCrack">
+        <input type="password" id="password" oninput="checkPasswordStrength(); calculateTimeToCrack();">
         <p id="strength"></p>
-        <p id="displayStrength"</p>
-        
+        <p id="displayStrength"></p> <!-- Correction ici -->
         <button id="showPassword" onclick="togglePassword()">Show Password</button>
     </div>
 
