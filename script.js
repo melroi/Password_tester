@@ -41,8 +41,10 @@ function calculateTimeToCrackValue(password) {
     var hours = minutes / 60;
     var days = hours / 24;
 
-    return days.toFixed(2) + " days";
+    return days.toFixed(2);  // Ne pas ajouter " days" ici
 }
+
+// Reste du code inchangé...
 
 function checkPasswordStrength() {
     var password = document.getElementById("password").value;
