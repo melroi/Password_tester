@@ -11,14 +11,38 @@ function togglePassword() {
     }
 }
 
+function calculateTimeToCrack() {
+    var password = document.getElementById("password").value;
+    var timeToCrack = calculateTimeToCrackValue(password); // Correction ici
+    var displayStrength = document.getElementById("displayStrength"); // Correction ici
 
+    displayStrength.innerHTML = "Estimated time to crack: " + timeToCrack;
+}
 
-function calculateTimeToCrack(password) {
+function calculateTimeToCrackValue(password) {
     // Supposons une attaque avec un ordinateur capable de tester 1 million de mots de passe par seconde
-    var guessesPerSecond = 100;
+    var guessesPerSecond = 1e3;
+
+    // Facteur de base pour la longueur du mot de passe
+    var lengthFactor = Math.pow(password.length, 2);
+
+    // Facteur supplémentaire pour chaque caractéristique (majuscule, nombre, caractère spécial)
+    var featuresFactor = 1;
+
+    if (/[A-Z]/.test(password)) {
+        featuresFactor *= 26; // Supposons 26 caractères majuscules
+    }
+
+    if (/[0-9]/.test(password)) {
+        featuresFactor *= 10; // Supposons 10 chiffres
+    }
+
+    if (/[!@#\$%\^&\*]/.test(password)) {
+        featuresFactor *= 10; // Supposons 10 caractères spéciaux
+    }
 
     // Calculer le nombre total de combinaisons possibles (force brute)
-    var totalCombinations = Math.pow(94, password.length);
+    var totalCombinations = lengthFactor * featuresFactor;
 
     // Estimation du temps nécessaire pour essayer toutes les combinaisons
     var seconds = totalCombinations / guessesPerSecond;
@@ -28,6 +52,7 @@ function calculateTimeToCrack(password) {
 
     return days.toFixed(2) + " days";
 }
+
 function checkPasswordStrength() {
     var password = document.getElementById("password").value;
     var strengthText = document.getElementById("strength");
@@ -60,38 +85,31 @@ function calculateLengthScore(length) {
     }
 }
 
-function calculateTimeToCrack(password) {
-    // Supposons une attaque avec un ordinateur capable de tester 1 million de mots de passe par seconde
-    var guessesPerSecond = 1e3;
+function calculateCharacterScore(password) {
+    var regexLowerCase = /[a-z]/;
+    var regexUpperCase = /[A-Z]/;
+    var regexNumbers = /[0-9]/;
+    var regexSpecialChars = /[!@#\$%\^&\*]/;
 
-    // Facteur de base pour la longueur du mot de passe
-    var lengthFactor = Math.pow(password.length, 2);
+    var characterScore = 0;
 
-    // Facteur supplémentaire pour chaque caractéristique (majuscule, nombre, caractère spécial)
-    var featuresFactor = 1;
-
-    if (/[A-Z]/.test(password)) {
-        featuresFactor *= 26; // Supposons 26 caractères majuscules
+    if (regexLowerCase.test(password)) {
+        characterScore++;
     }
 
-    if (/[0-9]/.test(password)) {
-        featuresFactor *= 10; // Supposons 10 chiffres
+    if (regexUpperCase.test(password)) {
+        characterScore++;
     }
 
-    if (/[!@#\$%\^&\*]/.test(password)) {
-        featuresFactor *= 10; // Supposons 10 caractères spéciaux
+    if (regexNumbers.test(password)) {
+        characterScore++;
     }
 
-    // Calculer le nombre total de combinaisons possibles (force brute)
-    var totalCombinations = lengthFactor * featuresFactor;
+    if (regexSpecialChars.test(password)) {
+        characterScore++;
+    }
 
-    // Estimation du temps nécessaire pour essayer toutes les combinaisons
-    var seconds = totalCombinations / guessesPerSecond;
-    var minutes = seconds / 60;
-    var hours = minutes / 60;
-    var days = hours / 24;
-
-    return days.toFixed(2) + " days";
+    return characterScore;
 }
 
 function displayStrength(score) {
@@ -131,4 +149,4 @@ function displayStrength(score) {
             strengthText.innerHTML = "Indétectable";
             break;
     }
-}     
+}
