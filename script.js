@@ -1,15 +1,15 @@
 function togglePassword() {
     var passwordField = document.getElementById("password");
-    var showPasswordButton = document.getElementById("showPassword");
+    var showPasswordCheckbox = document.getElementById("showPassword");
 
-    if (passwordField.type === "password") {
+    if (showPasswordCheckbox.checked) {
         passwordField.type = "text";
-        showPasswordButton.textContent = "Hide Password";
     } else {
         passwordField.type = "password";
-        showPasswordButton.textContent = "Show Password";
     }
 }
+
+// Reste du code inchangé...
 
 function calculateTimeToCrack(password) {
     var timeToCrack = calculateTimeToCrackValue(password);
