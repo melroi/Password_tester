@@ -11,13 +11,37 @@ function togglePassword() {
     }
 }
 
-function calculateTimeToCrack() {
-    var password = document.getElementById("password").value;
-    var timeToCrack = calculateTimeToCrackValue(password); // Correction ici
-    var displayStrength = document.getElementById("displayStrength"); // Correction ici
+function calculateTimeToCrack(password) {
+    var timeToCrack = calculateTimeToCrackValue(password);
+    var displayStrength = document.getElementById("displayStrength");
 
     displayStrength.innerHTML = "Estimated time to crack: " + timeToCrack;
 }
+
+function calculateTimeToCrackValue(password) {
+    var guessesPerSecond = 1e3;
+    var lengthFactor = Math.pow(password.length, 2);
+    var featuresFactor = 1;
+
+    if (/[A-Z]/.test(password)) {
+        featuresFactor *= 26;
+    }
+
+    if (/[0-9]/.test(password)) {
+        featuresFactor *= 10;
+    }
+
+    if (/[!@#\$%\^&\*]/.test(password)) {
+        featuresFactor *= 10;
+    }
+
+    var totalCombinations = lengthFactor * featuresFactor;
+    var seconds = totalCombinations / guessesPerSecond;
+    var minutes = seconds / 60;
+    var hours = minutes / 60;
+    var days = hours / 24;
+
+    return days.toFixed(2) + " days";
 }
 
 function checkPasswordStrength() {
@@ -34,21 +58,21 @@ function checkPasswordStrength() {
 
 function calculateLengthScore(length) {
     if (length < 8) {
-        return 1; // Très faible
+        return 1;
     } else if (length <= 8) {
-        return 2; // Faible
+        return 2;
     } else if (length <= 10) {
-        return 3; // Bon
+        return 3;
     } else if (length <= 12) {
-        return 4; // Très bon
+        return 4;
     } else if (length <= 14) {
-        return 5; // Incroyable
+        return 5;
     } else if (length <= 18) {
-        return 6; // Insane
+        return 6;
     } else if (length <= 20) {
-        return 7; // Monstrueux
+        return 7;
     } else {
-        return 8; // Indétectable
+        return 8;
     }
 }
 
@@ -78,45 +102,6 @@ function calculateCharacterScore(password) {
 
     return characterScore;
 }
-function calculateTimeToCrackValue(password) {
-    // Supposons une attaque avec un ordinateur capable de tester 1 million de mots de passe par seconde
-    var guessesPerSecond = 1e3;
-
-    // Facteur de base pour la longueur du mot de passe
-    var lengthFactor = Math.pow(password.length, 2);
-
-    // Facteur supplémentaire pour chaque caractéristique (majuscule, nombre, caractère spécial)
-    var featuresFactor = 1;
-
-    if (/[A-Z]/.test(password)) {
-        featuresFactor *= 26; // Supposons 26 caractères majuscules
-    }
-
-    if (/[0-9]/.test(password)) {
-        featuresFactor *= 10; // Supposons 10 chiffres
-    }
-
-    if (/[!@#\$%\^&\*]/.test(password)) {
-        featuresFactor *= 10; // Supposons 10 caractères spéciaux
-    }
-
-    // Calculer le nombre total de combinaisons possibles (force brute)
-    var totalCombinations = lengthFactor * featuresFactor;
-
-    // Estimation du temps nécessaire pour essayer toutes les combinaisons
-    var seconds = totalCombinations / guessesPerSecond;
-    var minutes = seconds / 60;
-    var hours = minutes / 60;
-    var days = hours / 24;
-
-    return days.toFixed(2) + " days";
-
-    var timeToCrack = calculateTimeToCrackValue(password);
-    var displayStrength = document.getElementById("displayStrength");
-
-    displayStrength.innerHTML = "Estimated time to crack: " + timeToCrack;
-}
-
 
 function displayStrength(score) {
     var strengthText = document.getElementById("strength");
